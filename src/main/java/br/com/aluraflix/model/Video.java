@@ -18,6 +18,14 @@ public class Video {
     @Column(name="url", nullable=false, length=90)
     private String url;
 
+    public Video() {}
+
+    public Video(String titulo, String descricao, String url) {
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.url = url;
+    }
+
     public Long getId() {
         return id;
     }
