@@ -35,9 +35,12 @@ public class VideosController {
     @PostMapping
     public ResponseEntity<VideoDto> saveVideo (@RequestBody @Valid VideoDto dto, UriComponentsBuilder uriBuilder) {
         Video video = dto.convert();
-        videoRepository.save(video);
-        URI uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
-        return ResponseEntity.created(uri).body(new VideoDto(video));
+        if (video != null) {
+            videoRepository.save(video);
+            URI uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
+            return ResponseEntity.created(uri).body(new VideoDto(video));
+        }
+            return ResponseEntity.badRequest().build();
     }
 
     @PutMapping(path = "/{id}")

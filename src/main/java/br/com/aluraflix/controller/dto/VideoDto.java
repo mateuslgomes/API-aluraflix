@@ -30,9 +30,11 @@ public class VideoDto {
     public VideoDto(){}
 
     public Video convert() {
-        System.out.println(url.substring(0, 31));
-        Video video = new Video(titulo = this.titulo, descricao = this.descricao, url = this.url);
-        return video;
+        if (url.substring(0, 31).equals("https://www.youtube.com/watch?v")) {
+            Video video = new Video(titulo = this.titulo, descricao = this.descricao, url = this.url);
+            return video;
+        }
+        return null;
     }
 
     public Video update(Long id, VideoRepository videoRepository) {
