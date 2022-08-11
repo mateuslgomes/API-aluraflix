@@ -1,12 +1,10 @@
 package br.com.aluraflix.model;
 
 public enum Cor {
-
-    RED,
+    VERMELHO,
     VERDE,
     ROXO,
     AMARELO,
     AZUL,
     LARANJA;
-
 }

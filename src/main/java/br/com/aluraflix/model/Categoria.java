@@ -16,6 +16,13 @@ public class Categoria {
     @Column(name="cor", nullable=false)
     private Cor cor;
 
+    public Categoria(){}
+
+    public Categoria(String titulo, Cor cor) {
+        this.titulo = titulo;
+        this.cor = cor;
+    }
+
     public Long getId() {
         return id;
     }
