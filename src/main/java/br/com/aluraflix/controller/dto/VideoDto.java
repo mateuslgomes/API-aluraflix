@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class VideoDto {
@@ -18,7 +19,7 @@ public class VideoDto {
     @Length(max = 255)
     private String descricao;
 
-    @NotNull @NotEmpty @Length(max = 90, min = 5)
+    @NotNull @NotEmpty @Length(max = 90, min = 35)
     private String url;
 
     public VideoDto(Video video) {
@@ -29,7 +30,7 @@ public class VideoDto {
     }
     public VideoDto(){}
 
-    public Video convert() {
+    public Video gerarVideo() {
         if (url.substring(0, 31).equals("https://www.youtube.com/watch?v")) {
             Video video = new Video(titulo = this.titulo, descricao = this.descricao, url = this.url);
             return video;
@@ -38,14 +39,22 @@ public class VideoDto {
     }
 
     public Video update(Long id, VideoRepository videoRepository) {
-        Optional<Video> videoOptional = videoRepository.findById(id);
-        Video video = videoOptional.get();
-        video.setDescricao(this.descricao);
-        video.setTitulo(this.titulo);
-        video.setUrl(this.url);
-        videoRepository.save(video);
-        return video;
+        try  {
+            Optional<Video> videoOptional = videoRepository.findById(id);
+            if (url.substring(0, 31).equals("https://www.youtube.com/watch?v")) {
+                Video video = videoOptional.get();
+                video.setDescricao(this.descricao);
+                video.setTitulo(this.titulo);
+                video.setUrl(this.url);
+                return video;
+            }
+        }
+        catch (NoSuchElementException e) {
+            return null;
+        }
+        return null;
     }
+
 
     public Long getId() {
         return id;
@@ -79,7 +88,11 @@ public class VideoDto {
         this.url = url;
     }
 
-    public void delete(Long id, VideoRepository videoRepository) {
-        videoRepository.deleteById(id);
+    public Boolean delete(Long id, VideoRepository videoRepository) {
+        if (videoRepository.existsById(id)) {
+            videoRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

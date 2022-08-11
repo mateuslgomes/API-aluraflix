@@ -11,6 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -27,14 +28,17 @@ public class VideosController {
     }
 
     @RequestMapping(path = "/{id}")
-    public Optional<Video> video(@PathVariable Long id) {
+    public ResponseEntity<VideoDto> video(@PathVariable Long id) {
         Optional<Video> video = videoRepository.findById(id);
-        return video;
+        if (!video.isEmpty()) {
+            return ResponseEntity.ok(new VideoDto(video.get()));
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
     public ResponseEntity<VideoDto> saveVideo (@RequestBody @Valid VideoDto dto, UriComponentsBuilder uriBuilder) {
-        Video video = dto.convert();
+        Video video = dto.gerarVideo();
         if (video != null) {
             videoRepository.save(video);
             URI uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
@@ -46,13 +50,19 @@ public class VideosController {
     @PutMapping(path = "/{id}")
     public ResponseEntity<VideoDto> updateVideo(@PathVariable Long id, @RequestBody @Valid VideoDto dto) {
         Video video = dto.update(id, videoRepository);
-        return ResponseEntity.ok(new VideoDto(video));
+        if (video != null) {
+            videoRepository.save(video);
+            return ResponseEntity.ok(new VideoDto(video));
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteVideo(@PathVariable Long id, VideoDto dto) {
-        dto.delete(id, videoRepository);
-        return ResponseEntity.ok().build();
+        if (dto.delete(id, videoRepository)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
 }
