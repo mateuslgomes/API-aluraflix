@@ -1,10 +1,12 @@
 package br.com.aluraflix.controller.dto;
 
 import br.com.aluraflix.model.Video;
+import br.com.aluraflix.repository.VideoRepository;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 public class VideoDto {
 
@@ -25,11 +27,21 @@ public class VideoDto {
         this.url = video.getUrl();
         this.titulo = video.getTitulo();
     }
-
     public VideoDto(){}
 
-    public Video converter() {
+    public Video convert() {
         Video video = new Video(titulo=this.titulo, descricao=this.descricao, url=this.url);
+        return video;
+    }
+
+    public Video update(Long id, VideoRepository videoRepository) {
+        Optional<Video> videoOptional = videoRepository.findById(id);
+        Video video = videoOptional.get();
+        video.setDescricao(this.descricao);
+        video.setTitulo(this.titulo);
+        System.out.println(this.titulo + video.getTitulo());
+        video.setUrl(this.url);
+        videoRepository.save(video);
         return video;
     }
 

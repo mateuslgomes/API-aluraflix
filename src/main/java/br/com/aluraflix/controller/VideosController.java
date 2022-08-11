@@ -6,7 +6,6 @@ import br.com.aluraflix.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -29,16 +28,23 @@ public class VideosController {
 
     @RequestMapping(path = "/{id}")
     public Optional<Video> video(@PathVariable Long id) {
-        Optional<Video> video =  videoRepository.findById(id);
+        Optional<Video> video = videoRepository.findById(id);
         return video;
     }
 
     @PostMapping
-    public ResponseEntity<VideoDto> saveVideo (@RequestBody @Valid VideoDto videoDto, UriComponentsBuilder uriBuilder) {
-        Video video = videoDto.converter();
+    public ResponseEntity<VideoDto> saveVideo (@RequestBody @Valid VideoDto dto, UriComponentsBuilder uriBuilder) {
+        Video video = dto.convert();
         videoRepository.save(video);
         URI uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
         return ResponseEntity.created(uri).body(new VideoDto(video));
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<VideoDto> updateVideo(@PathVariable Long id, @RequestBody @Valid VideoDto dto) {
+        System.out.println(id);
+        Video video = dto.update(id, videoRepository);
+        return ResponseEntity.ok(new VideoDto(video));
     }
 
 }

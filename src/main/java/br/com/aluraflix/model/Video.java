@@ -50,6 +50,7 @@ public class Video {
         return url;
     }
 
+
     public void setUrl(String url) {
         this.url = url;
     }
