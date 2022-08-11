@@ -42,9 +42,14 @@ public class VideosController {
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<VideoDto> updateVideo(@PathVariable Long id, @RequestBody @Valid VideoDto dto) {
-        System.out.println(id);
         Video video = dto.update(id, videoRepository);
         return ResponseEntity.ok(new VideoDto(video));
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> deleteVideo(@PathVariable Long id, VideoDto dto) {
+        dto.delete(id, videoRepository);
+        return ResponseEntity.ok().build();
     }
 
 }

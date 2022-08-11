@@ -30,7 +30,8 @@ public class VideoDto {
     public VideoDto(){}
 
     public Video convert() {
-        Video video = new Video(titulo=this.titulo, descricao=this.descricao, url=this.url);
+        System.out.println(url.substring(0, 31));
+        Video video = new Video(titulo = this.titulo, descricao = this.descricao, url = this.url);
         return video;
     }
 
@@ -39,7 +40,6 @@ public class VideoDto {
         Video video = videoOptional.get();
         video.setDescricao(this.descricao);
         video.setTitulo(this.titulo);
-        System.out.println(this.titulo + video.getTitulo());
         video.setUrl(this.url);
         videoRepository.save(video);
         return video;
@@ -75,5 +75,9 @@ public class VideoDto {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public void delete(Long id, VideoRepository videoRepository) {
+        videoRepository.deleteById(id);
     }
 }
