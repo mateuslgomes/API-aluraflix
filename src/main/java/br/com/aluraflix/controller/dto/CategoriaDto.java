@@ -6,17 +6,14 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Optional;
 
 public class CategoriaDto {
     private Long id;
 
-    @NotNull
-    @NotEmpty
-    @Length(max = 25, min = 3)
+    @NotNull @NotEmpty @Length(max = 60, min = 3)
     private String titulo;
 
-    @NotNull @NotEmpty
+    @NotNull
     private Cor cor;
 
     public CategoriaDto(String titulo, Cor cor) {
@@ -54,5 +51,9 @@ public class CategoriaDto {
 
     public void setCor(Cor cor) {
         this.cor = cor;
+    }
+
+    public Categoria gerarCategoria() {
+        return new Categoria(this.titulo, this.getCor());
     }
 }

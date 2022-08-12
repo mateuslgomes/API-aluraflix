@@ -7,10 +7,11 @@ import br.com.aluraflix.model.Video;
 import br.com.aluraflix.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,4 +36,13 @@ public class CategoriaController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @PostMapping
+    public ResponseEntity<CategoriaDto> saveVideo (@RequestBody @Valid CategoriaDto dto, UriComponentsBuilder uriBuilder) {
+        Categoria categoria = dto.gerarCategoria();
+        categoriaRepository.save(categoria);
+        URI uri = uriBuilder.path("/categorias/{id}").buildAndExpand(categoria.getId()).toUri();
+        return ResponseEntity.created(uri).body(new CategoriaDto(categoria));
+    }
+
 }
