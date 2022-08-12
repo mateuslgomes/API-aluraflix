@@ -1,6 +1,7 @@
 package br.com.aluraflix.controller;
 
 import br.com.aluraflix.controller.dto.CategoriaDto;
+import br.com.aluraflix.controller.dto.VideoDto;
 import br.com.aluraflix.model.Categoria;
 import br.com.aluraflix.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,14 @@ public class CategoriaController {
         if (categoria != null) {
             categoriaRepository.save(categoria);
             return ResponseEntity.ok(new CategoriaDto(categoria));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> deleteVideo(@PathVariable Long id, CategoriaDto dto) {
+        if (dto.delete(id, categoriaRepository)) {
+            return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
     }
