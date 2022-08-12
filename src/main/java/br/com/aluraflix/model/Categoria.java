@@ -1,5 +1,7 @@
 package br.com.aluraflix.model;
 
+import br.com.aluraflix.repository.CategoriaRepository;
+
 import javax.persistence.*;
 
 @Entity
@@ -33,5 +35,13 @@ public class Categoria {
 
     public Cor getCor() {
         return cor;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public void setCor(Cor cor) {
+        this.cor = cor;
     }
 }

@@ -2,10 +2,14 @@ package br.com.aluraflix.controller.dto;
 
 import br.com.aluraflix.model.Categoria;
 import br.com.aluraflix.model.Cor;
+import br.com.aluraflix.model.Video;
+import br.com.aluraflix.repository.CategoriaRepository;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class CategoriaDto {
     private Long id;
@@ -55,5 +59,18 @@ public class CategoriaDto {
 
     public Categoria gerarCategoria() {
         return new Categoria(this.titulo, this.getCor());
+    }
+
+    public Categoria update(Long id, CategoriaRepository categoriaRepository) {
+        try  {
+            Optional<Categoria> categoriaOptional = categoriaRepository.findById(id);
+            Categoria categoria = categoriaOptional.get();
+            categoria.setTitulo(this.titulo);
+            categoria.setCor(this.cor);
+            return categoria;
+        }
+        catch (NoSuchElementException e) {
+            return null;
+        }
     }
 }

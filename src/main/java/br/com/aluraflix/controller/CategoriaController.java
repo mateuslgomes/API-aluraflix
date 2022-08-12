@@ -1,9 +1,7 @@
 package br.com.aluraflix.controller;
 
 import br.com.aluraflix.controller.dto.CategoriaDto;
-import br.com.aluraflix.controller.dto.VideoDto;
 import br.com.aluraflix.model.Categoria;
-import br.com.aluraflix.model.Video;
 import br.com.aluraflix.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,11 +36,21 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoriaDto> saveVideo (@RequestBody @Valid CategoriaDto dto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<CategoriaDto> saveCategoria (@RequestBody @Valid CategoriaDto dto, UriComponentsBuilder uriBuilder) {
         Categoria categoria = dto.gerarCategoria();
         categoriaRepository.save(categoria);
         URI uri = uriBuilder.path("/categorias/{id}").buildAndExpand(categoria.getId()).toUri();
         return ResponseEntity.created(uri).body(new CategoriaDto(categoria));
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<CategoriaDto> updateCategoria(@PathVariable Long id, @RequestBody @Valid CategoriaDto dto) {
+        Categoria categoria = dto.update(id, categoriaRepository);
+        if (categoria != null) {
+            categoriaRepository.save(categoria);
+            return ResponseEntity.ok(new CategoriaDto(categoria));
+        }
+        return ResponseEntity.badRequest().build();
     }
 
 }
