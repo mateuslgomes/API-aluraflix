@@ -1,8 +1,7 @@
 package br.com.aluraflix.model;
 
-import br.com.aluraflix.repository.CategoriaRepository;
-
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "categoria")
@@ -19,6 +18,13 @@ public class Categoria {
     private Cor cor;
 
     public Categoria(){}
+
+   @OneToMany(mappedBy = "categoria")
+    private List<Video> video;
+
+    public void setVideos(List<Video> videos) {
+        this.video = videos;
+    }
 
     public Categoria(String titulo, Cor cor) {
         this.titulo = titulo;

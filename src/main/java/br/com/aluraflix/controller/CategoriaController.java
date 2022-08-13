@@ -61,5 +61,4 @@ public class CategoriaController {
         }
         return ResponseEntity.badRequest().build();
     }
-
 }
