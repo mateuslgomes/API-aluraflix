@@ -20,6 +20,7 @@ public class Video {
     private String url;
 
 
+
     @ManyToOne
     @JoinColumn(name = "categoria")
     private Categoria categoria;

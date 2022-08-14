@@ -1,9 +1,10 @@
 package br.com.aluraflix.controller;
 
 import br.com.aluraflix.controller.dto.CategoriaDto;
-import br.com.aluraflix.controller.dto.VideoDto;
 import br.com.aluraflix.model.Categoria;
+import br.com.aluraflix.model.Video;
 import br.com.aluraflix.repository.CategoriaRepository;
+import br.com.aluraflix.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,9 @@ public class CategoriaController {
     @Autowired
     CategoriaRepository categoriaRepository;
 
+    @Autowired
+    VideoRepository videoRepository;
+
     @RequestMapping
     public List<Categoria> categorias() {
         List<Categoria> categorias = categoriaRepository.findAll();
@@ -32,6 +36,15 @@ public class CategoriaController {
         Optional<Categoria> categoria = categoriaRepository.findById(id);
         if (!categoria.isEmpty()) {
             return ResponseEntity.ok(new CategoriaDto(categoria.get()));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @RequestMapping(path = "/{id}/videos")
+    public ResponseEntity<List<Video>> videoByCategoria(@PathVariable Long id) {
+        List<Video> video = videoRepository.findByCategoria(id);
+        if (!video.isEmpty()) {
+            return ResponseEntity.ok(video);
         }
         return ResponseEntity.notFound().build();
     }
