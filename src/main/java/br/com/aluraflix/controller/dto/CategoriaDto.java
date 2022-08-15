@@ -73,8 +73,6 @@ public class CategoriaDto {
         }
     }
 
-
-
     public boolean delete(Long id, CategoriaRepository categoriaRepository) {
         if (categoriaRepository.existsById(id)) {
             categoriaRepository.deleteById(id);

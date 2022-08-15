@@ -16,9 +16,7 @@ public class Categoria {
     @Enumerated(EnumType.STRING)
     @Column(name="cor", nullable=false)
     private Cor cor;
-
     public Categoria(){}
-
    @OneToMany(mappedBy = "categoria")
     private List<Video> video;
 

@@ -27,17 +27,13 @@ public class CategoriaController {
 
     @RequestMapping
     public List<Categoria> categorias() {
-        List<Categoria> categorias = categoriaRepository.findAll();
-        return categorias;
+        return categoriaRepository.findAll();
     }
 
     @RequestMapping(path = "/{id}")
-    public ResponseEntity<CategoriaDto> categoria(@PathVariable Long id) {
+    public ResponseEntity<Categoria> categoria(@PathVariable Long id) {
         Optional<Categoria> categoria = categoriaRepository.findById(id);
-        if (!categoria.isEmpty()) {
-            return ResponseEntity.ok(new CategoriaDto(categoria.get()));
-        }
-        return ResponseEntity.notFound().build();
+        return categoria.map(value -> ResponseEntity.ok(value)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @RequestMapping(path = "/{id}/videos")
@@ -50,19 +46,19 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoriaDto> saveCategoria (@RequestBody @Valid CategoriaDto dto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<Categoria> saveCategoria (@RequestBody @Valid CategoriaDto dto, UriComponentsBuilder uriBuilder) {
         Categoria categoria = dto.gerarCategoria();
         categoriaRepository.save(categoria);
         URI uri = uriBuilder.path("/categorias/{id}").buildAndExpand(categoria.getId()).toUri();
-        return ResponseEntity.created(uri).body(new CategoriaDto(categoria));
+        return ResponseEntity.created(uri).body(categoria);
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<CategoriaDto> updateCategoria(@PathVariable Long id, @RequestBody @Valid CategoriaDto dto) {
+    public ResponseEntity<Categoria> updateCategoria(@PathVariable Long id, @RequestBody @Valid CategoriaDto dto) {
         Categoria categoria = dto.update(id, categoriaRepository);
         if (categoria != null) {
             categoriaRepository.save(categoria);
-            return ResponseEntity.ok(new CategoriaDto(categoria));
+            return ResponseEntity.ok(categoria);
         }
         return ResponseEntity.badRequest().build();
     }

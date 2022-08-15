@@ -24,16 +24,14 @@ public class VideoDto {
     @NotNull @NotEmpty @Length(max = 90, min = 35)
     private String url;
 
-    public VideoDto(Video video) {
-        this.id = video.getId();
-        this.descricao = video.getDescricao();
-        this.url = video.getUrl();
-        this.titulo = video.getTitulo();
-    }
     public VideoDto(){}
 
+    private Boolean validarUrl() {
+        return url.substring(0, 31).equals("https://www.youtube.com/watch?v");
+    }
+
     public Video gerarVideo() {
-        if (url.substring(0, 31).equals("https://www.youtube.com/watch?v")) {
+        if (validarUrl()) {
             Video video = new Video(titulo = this.titulo, descricao = this.descricao, url = this.url);
             return video;
         }
@@ -43,7 +41,7 @@ public class VideoDto {
     public Video update(Long id, VideoRepository videoRepository) {
         try  {
             Optional<Video> videoOptional = videoRepository.findById(id);
-            if (url.substring(0, 31).equals("https://www.youtube.com/watch?v")) {
+            if (validarUrl()) {
                 Video video = videoOptional.get();
                 video.setDescricao(this.descricao);
                 video.setTitulo(this.titulo);
@@ -56,7 +54,6 @@ public class VideoDto {
         }
         return null;
     }
-
 
     public Long getId() {
         return id;
@@ -88,14 +85,6 @@ public class VideoDto {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public Boolean delete(Long id, VideoRepository videoRepository) {
-        if (videoRepository.existsById(id)) {
-            videoRepository.deleteById(id);
-            return true;
-        }
-        return false;
     }
 
 }
