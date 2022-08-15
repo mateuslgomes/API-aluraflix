@@ -1,13 +1,13 @@
 package br.com.aluraflix.controller.dto;
 
+import br.com.aluraflix.model.Categoria;
 import br.com.aluraflix.model.Video;
+import br.com.aluraflix.repository.CategoriaRepository;
 import br.com.aluraflix.repository.VideoRepository;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.data.jpa.repository.Query;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -24,16 +24,26 @@ public class VideoDto {
     @NotNull @NotEmpty @Length(max = 90, min = 35)
     private String url;
 
+    private Long categoriaId;
+
+    public final static Long CATEGORIA_LIVRE = 1L;
+
     public VideoDto(){}
 
     private Boolean validarUrl() {
         return url.substring(0, 31).equals("https://www.youtube.com/watch?v");
     }
 
-    public Video gerarVideo() {
-        if (validarUrl()) {
-            Video video = new Video(titulo = this.titulo, descricao = this.descricao, url = this.url);
-            return video;
+    public Video gerarVideo(CategoriaRepository categoriaRepository) {
+        if (validarUrl() && this.categoriaId == null) {
+            Optional<Categoria> categoria = categoriaRepository.findById(CATEGORIA_LIVRE);
+            return new Video(titulo = this.titulo, descricao = this.descricao, url = this.url,
+                   categoria.get());
+
+        } if (validarUrl() && this.categoriaId != null) {
+            Optional<Categoria> categoria = categoriaRepository.findById(categoriaId);
+            return new Video(titulo = this.titulo, descricao = this.descricao, url = this.url,
+                    categoria.get());
         }
         return null;
     }
@@ -57,6 +67,14 @@ public class VideoDto {
 
     public Long getId() {
         return id;
+    }
+
+    public Long getCategoriaId() {
+        return categoriaId;
+    }
+
+    public void setCategoriaId(Long categoriaId) {
+        this.categoriaId = categoriaId;
     }
 
     public void setId(Long id) {

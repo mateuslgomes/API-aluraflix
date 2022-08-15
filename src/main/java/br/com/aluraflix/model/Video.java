@@ -1,5 +1,7 @@
 package br.com.aluraflix.model;
 
+import net.bytebuddy.implementation.bind.annotation.Default;
+
 import javax.persistence.*;
 
 @Entity
@@ -24,7 +26,8 @@ public class Video {
 
     public Video() {}
 
-    public Video(String titulo, String descricao, String url) {
+    public Video(String titulo, String descricao, String url, Categoria categoria) {
+        this.categoria = categoria;
         this.titulo = titulo;
         this.descricao = descricao;
         this.url = url;

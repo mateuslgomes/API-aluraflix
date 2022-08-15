@@ -2,6 +2,7 @@ package br.com.aluraflix.controller;
 
 import br.com.aluraflix.controller.dto.VideoDto;
 import br.com.aluraflix.model.Video;
+import br.com.aluraflix.repository.CategoriaRepository;
 import br.com.aluraflix.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -20,6 +21,9 @@ public class VideosController {
     @Autowired
     VideoRepository videoRepository;
 
+    @Autowired
+    CategoriaRepository categoriaRepository;
+
     @RequestMapping
     public List<Video> videos(@RequestParam(required = false, value = "search") String titulo){
         if (titulo == null) {
@@ -36,8 +40,12 @@ public class VideosController {
 
     @PostMapping
     public ResponseEntity<Video> saveVideo (@RequestBody @Valid VideoDto dto, UriComponentsBuilder uriBuilder) {
-        Video video = dto.gerarVideo();
+        Video video = dto.gerarVideo(categoriaRepository);
         if (video != null) {
+            System.out.println("Categoria: " + video.getCategoria());
+            System.out.println("Titulo: " + video.getTitulo());
+            System.out.println("Url:" + video.getUrl());
+            System.out.println(video.getDescricao());
             videoRepository.save(video);
             URI uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
             return ResponseEntity.created(uri).body(video);
