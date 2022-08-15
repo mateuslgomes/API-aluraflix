@@ -20,19 +20,19 @@ public class VideosController {
     @Autowired
     VideoRepository videoRepository;
 
+
     @RequestMapping
-    public List<Video> videos() {
-        List<Video> videos = videoRepository.findAll();
-        return videos;
+    public List<Video> videos(@RequestParam(required = false, value = "search") String titulo){
+        if (titulo == null) {
+            return videoRepository.findAll();
+        }
+        return videoRepository.findByTitulo(titulo);
     }
 
     @RequestMapping(path = "/{id}")
     public ResponseEntity<VideoDto> video(@PathVariable Long id) {
         Optional<Video> video = videoRepository.findById(id);
-        if (!video.isEmpty()) {
-            return ResponseEntity.ok(new VideoDto(video.get()));
-        }
-        return ResponseEntity.notFound().build();
+        return video.map(value -> ResponseEntity.ok(new VideoDto(value))).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping

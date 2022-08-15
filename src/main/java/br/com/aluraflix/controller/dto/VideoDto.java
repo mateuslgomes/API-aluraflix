@@ -3,9 +3,11 @@ package br.com.aluraflix.controller.dto;
 import br.com.aluraflix.model.Video;
 import br.com.aluraflix.repository.VideoRepository;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.jpa.repository.Query;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -95,4 +97,5 @@ public class VideoDto {
         }
         return false;
     }
+
 }

@@ -1,7 +1,6 @@
 package br.com.aluraflix.model;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "videos")
@@ -19,8 +18,6 @@ public class Video {
     @Column(name="url", nullable=false, length=90)
     private String url;
 
-
-
     @ManyToOne
     @JoinColumn(name = "categoria")
     private Categoria categoria;
@@ -36,7 +33,6 @@ public class Video {
     public Categoria getCategoria() {
         return categoria;
     }
-
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
