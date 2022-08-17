@@ -6,6 +6,7 @@ import br.com.aluraflix.repository.CategoriaRepository;
 import br.com.aluraflix.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -27,6 +28,7 @@ public class VideosController {
     @RequestMapping
     public List<Video> videos(@RequestParam(required = false, value = "search") String titulo){
         if (titulo == null) {
+            Sort sort = Sort.by("id").descending();
             return videoRepository.findAll();
         }
         return videoRepository.findByTitulo(titulo);

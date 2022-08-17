@@ -33,7 +33,7 @@ public class CategoriaController {
     @RequestMapping(path = "/{id}")
     public ResponseEntity<Categoria> categoria(@PathVariable Long id) {
         Optional<Categoria> categoria = categoriaRepository.findById(id);
-        return categoria.map(value -> ResponseEntity.ok(value)).orElseGet(() -> ResponseEntity.notFound().build());
+        return categoria.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @RequestMapping(path = "/{id}/videos")
