@@ -34,6 +34,11 @@ public class VideosController {
         return videoRepository.findByTitulo(titulo);
     }
 
+    @RequestMapping("/free")
+    public List<Video> videosFree(){
+        return videoRepository.findAll();
+    }
+
     @RequestMapping(path = "/{id}")
     public ResponseEntity<Video> video(@PathVariable Long id) {
         Optional<Video> video = videoRepository.findById(id);
