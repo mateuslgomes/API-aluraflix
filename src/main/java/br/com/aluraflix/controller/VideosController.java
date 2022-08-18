@@ -49,10 +49,6 @@ public class VideosController {
     public ResponseEntity<Video> saveVideo (@RequestBody @Valid VideoDto dto, UriComponentsBuilder uriBuilder) {
         Video video = dto.gerarVideo(categoriaRepository);
         if (video != null) {
-            System.out.println("Categoria: " + video.getCategoria());
-            System.out.println("Titulo: " + video.getTitulo());
-            System.out.println("Url:" + video.getUrl());
-            System.out.println(video.getDescricao());
             videoRepository.save(video);
             URI uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
             return ResponseEntity.created(uri).body(video);
@@ -62,7 +58,7 @@ public class VideosController {
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<Video> updateVideo(@PathVariable Long id, @RequestBody @Valid VideoDto dto) {
-        Video video = dto.update(id, videoRepository);
+        Video video = dto.update(id, videoRepository, categoriaRepository);
         if (video != null) {
             videoRepository.save(video);
             return ResponseEntity.ok(video);

@@ -48,11 +48,13 @@ public class VideoDto {
         return null;
     }
 
-    public Video update(Long id, VideoRepository videoRepository) {
+    public Video update(Long id, VideoRepository videoRepository, CategoriaRepository categoriaRepository) {
         try  {
             Optional<Video> videoOptional = videoRepository.findById(id);
+            Optional<Categoria> categoria = categoriaRepository.findById(id);
             if (validarUrl()) {
                 Video video = videoOptional.get();
+                video.setCategoria(categoria.get());
                 video.setDescricao(this.descricao);
                 video.setTitulo(this.titulo);
                 video.setUrl(this.url);
