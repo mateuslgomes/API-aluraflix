@@ -6,6 +6,7 @@ import br.com.aluraflix.repository.CategoriaRepository;
 import br.com.aluraflix.repository.VideoRepository;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.NoSuchElementException;
@@ -15,7 +16,7 @@ public class VideoDto {
 
     private Long id;
 
-    @NotNull @NotEmpty @Length(max = 50, min = 5)
+    @NotNull @NotEmpty @NotBlank @Length(max = 50, min = 5)
     private String titulo;
 
     @Length(max = 255)
@@ -51,7 +52,7 @@ public class VideoDto {
     public Video update(Long id, VideoRepository videoRepository, CategoriaRepository categoriaRepository) {
         try  {
             Optional<Video> videoOptional = videoRepository.findById(id);
-            Optional<Categoria> categoria = categoriaRepository.findById(id);
+            Optional<Categoria> categoria = categoriaRepository.findById(categoriaId);
             if (validarUrl()) {
                 Video video = videoOptional.get();
                 video.setCategoria(categoria.get());

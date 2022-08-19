@@ -7,9 +7,12 @@ import javax.persistence.Id;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import java.io.Serial;
+
 @Entity
 public class Perfil implements GrantedAuthority {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

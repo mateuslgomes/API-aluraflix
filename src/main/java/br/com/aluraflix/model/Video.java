@@ -1,7 +1,5 @@
 package br.com.aluraflix.model;
 
-import net.bytebuddy.implementation.bind.annotation.Default;
-
 import javax.persistence.*;
 
 @Entity

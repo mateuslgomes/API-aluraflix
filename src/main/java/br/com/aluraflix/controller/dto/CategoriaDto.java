@@ -5,6 +5,7 @@ import br.com.aluraflix.model.Cor;
 import br.com.aluraflix.repository.CategoriaRepository;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.NoSuchElementException;
@@ -13,7 +14,7 @@ import java.util.Optional;
 public class CategoriaDto {
     private Long id;
 
-    @NotNull @NotEmpty @Length(max = 60, min = 3)
+    @NotNull @NotEmpty @NotBlank @Length(max = 60, min = 3)
     private String titulo;
 
     @NotNull
@@ -61,6 +62,7 @@ public class CategoriaDto {
     }
 
     public Categoria update(Long id, CategoriaRepository categoriaRepository) {
+        if (id == 1) {return null;}
         try  {
             Optional<Categoria> categoriaOptional = categoriaRepository.findById(id);
             Categoria categoria = categoriaOptional.get();
@@ -74,7 +76,7 @@ public class CategoriaDto {
     }
 
     public boolean delete(Long id, CategoriaRepository categoriaRepository) {
-        if (categoriaRepository.existsById(id)) {
+        if (categoriaRepository.existsById(id) && id != 1) {
             categoriaRepository.deleteById(id);
             return true;
         }

@@ -6,6 +6,7 @@ import br.com.aluraflix.model.Video;
 import br.com.aluraflix.repository.CategoriaRepository;
 import br.com.aluraflix.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -53,6 +54,7 @@ public class CategoriaController {
         return ResponseEntity.created(uri).body(categoria);
     }
 
+
     @PutMapping(path = "/{id}")
     public ResponseEntity<Categoria> updateCategoria(@PathVariable Long id, @RequestBody @Valid CategoriaDto dto) {
         Categoria categoria = dto.update(id, categoriaRepository);
@@ -66,8 +68,8 @@ public class CategoriaController {
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteVideo(@PathVariable Long id, CategoriaDto dto) {
         if (dto.delete(id, categoriaRepository)) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.accepted().build();
         }
-        return ResponseEntity.badRequest().build();
+        return new ResponseEntity<>("O ID 1 não pode ser deletado.", HttpStatus.FORBIDDEN);
     }
 }
