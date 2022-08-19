@@ -82,5 +82,22 @@ Uma documentação mais completa será adicionada em breve, mas para testes simp
 > Deleta o video com o ID escolhido.
 #
 
-<img src="https://user-images.githubusercontent.com/79534537/130516084-f199b740-4daf-4d67-a995-9bfdb2bd4560.png" alt="aluraflix" width="320"/>
+## Autenticação
+
+- POST /auth
+> Use o tipo e o token gerado para se autenticar.
+
+```
+{
+    "email": "user@email.com",
+    "senha": "password"
+}
+```
+
+##### Resultado:
+
+![image](https://user-images.githubusercontent.com/97681752/185518179-e0f1fa6e-f039-4267-90cf-709472cb2ffa.png)
+
+
+<img src="https://user-images.githubusercontent.com/79534537/130516084-f199b740-4daf-4d67-a995-9bfdb2bd4560.png" alt="aluraflix" width="250"/>
 
