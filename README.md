@@ -2,7 +2,7 @@
 # Alura Backend Challenge 
 
 <h2 id="objetivo"> Objetivo </h2>
-Desenvolver uma API REST backend do zero, aplicando regras de negócio fornecidas pela alura.
+Desenvolver uma API REST backend do zero, aplicando regras de negócio fornecidas pela Alura.
 
 ## Endpoints disponíveis
 Uma documentação mais completa será adicionada em breve, mas para testes simples, é possivel utilizar os endpoints listados abaixo.
