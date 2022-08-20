@@ -5,14 +5,12 @@
 Desenvolver uma API REST backend do zero, aplicando regras de negócio fornecidas pela Alura.
 
 ## Endpoints disponíveis
-Uma documentação mais completa será adicionada em breve, mas para testes simples, é possivel utilizar os endpoints listados abaixo.
 
-
-## Não precisa de autenticação.
+### Não precisa de autenticação.
 - GET /videos/free
 > Lista todos os vídeos atualmente cadastrados.
 
-## Precisa de autenticação.
+### Precisa de autenticação.
 
 - GET /videos
 > Lista todos os vídeos atualmente cadastrados.
