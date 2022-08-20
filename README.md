@@ -8,7 +8,7 @@ Desenvolver uma API REST backend do zero, aplicando regras de negócio fornecida
 
 ### Não precisa de autenticação.
 - GET /videos/free
-> Lista todos os vídeos atualmente cadastrados.
+> Lista todos os vídeos atualmente cadastrados e permitidos para usuários free.
 
 ### Precisa de autenticação.
 
