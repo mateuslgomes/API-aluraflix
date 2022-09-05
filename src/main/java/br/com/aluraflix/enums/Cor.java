@@ -1,4 +1,4 @@
-package br.com.aluraflix.model;
+package br.com.aluraflix.enums;
 
 public enum Cor {
     VERMELHO,

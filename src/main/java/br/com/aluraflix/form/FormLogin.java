@@ -1,8 +1,8 @@
-package br.com.aluraflix.controller.form;
+package br.com.aluraflix.form;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-public class LoginForm {
+public class FormLogin {
 
     private String email;
     private String senha;

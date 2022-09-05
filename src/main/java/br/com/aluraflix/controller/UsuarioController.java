@@ -1,6 +1,6 @@
 package br.com.aluraflix.controller;
 
-import br.com.aluraflix.controller.form.CreateForm;
+import br.com.aluraflix.form.FormCreate;
 import br.com.aluraflix.model.Usuario;
 import br.com.aluraflix.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/usuario")
@@ -24,7 +21,7 @@ public class UsuarioController {
     UsuarioRepository usuarioRepository;
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid CreateForm form) {
+    public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid FormCreate form) {
         Usuario usuario = form.gerarUsuario(form, usuarioRepository);
         if (usuario != null) {
             usuarioRepository.save(usuario);

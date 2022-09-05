@@ -1,9 +1,11 @@
-package br.com.aluraflix.controller.dto;
+package br.com.aluraflix.dtos;
 
 import br.com.aluraflix.model.Categoria;
 import br.com.aluraflix.model.Video;
 import br.com.aluraflix.repository.CategoriaRepository;
 import br.com.aluraflix.repository.VideoRepository;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
@@ -12,6 +14,8 @@ import javax.validation.constraints.NotNull;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@Getter
+@Setter
 public class VideoDto {
 
     private Long id;
@@ -66,46 +70,6 @@ public class VideoDto {
             return null;
         }
         return null;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Long getCategoriaId() {
-        return categoriaId;
-    }
-
-    public void setCategoriaId(Long categoriaId) {
-        this.categoriaId = categoriaId;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
 }

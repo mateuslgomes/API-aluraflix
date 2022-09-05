@@ -1,4 +1,4 @@
-package br.com.aluraflix.controller.form;
+package br.com.aluraflix.form;
 
 import br.com.aluraflix.model.Usuario;
 import br.com.aluraflix.repository.UsuarioRepository;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Optional;
 
-public class CreateForm {
+public class FormCreate {
 
     @NotNull @NotEmpty @NotBlank @Size(min = 3, max = 55)
     private String nome;
@@ -33,7 +33,7 @@ public class CreateForm {
         return this.email;
     }
 
-    public Usuario gerarUsuario(CreateForm form, UsuarioRepository usuarioRepository) {
+    public Usuario gerarUsuario(FormCreate form, UsuarioRepository usuarioRepository) {
         Optional<Usuario> email = usuarioRepository.findByEmail(form.getEmail());
         if (nome != null && email.isEmpty() && senha != null) {
             return new Usuario(nome, this.email, new BCryptPasswordEncoder().encode(senha));

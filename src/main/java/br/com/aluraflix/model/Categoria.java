@@ -1,8 +1,14 @@
 package br.com.aluraflix.model;
 
+import br.com.aluraflix.enums.Cor;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "categoria")
 public class Categoria {
@@ -20,32 +26,9 @@ public class Categoria {
    @OneToMany(mappedBy = "categoria")
     private List<Video> video;
 
-    public void setVideos(List<Video> videos) {
-        this.video = videos;
-    }
-
     public Categoria(String titulo, Cor cor) {
         this.titulo = titulo;
         this.cor = cor;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public Cor getCor() {
-        return cor;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public void setCor(Cor cor) {
-        this.cor = cor;
-    }
 }

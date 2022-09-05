@@ -1,6 +1,8 @@
 package br.com.aluraflix.config.security;
 
 import br.com.aluraflix.repository.UsuarioRepository;
+import br.com.aluraflix.services.AutenticacaoService;
+import br.com.aluraflix.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

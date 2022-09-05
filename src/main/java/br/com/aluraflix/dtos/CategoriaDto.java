@@ -1,7 +1,7 @@
-package br.com.aluraflix.controller.dto;
+package br.com.aluraflix.dtos;
 
 import br.com.aluraflix.model.Categoria;
-import br.com.aluraflix.model.Cor;
+import br.com.aluraflix.enums.Cor;
 import br.com.aluraflix.repository.CategoriaRepository;
 import org.hibernate.validator.constraints.Length;
 

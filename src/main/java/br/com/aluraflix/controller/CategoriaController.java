@@ -1,6 +1,6 @@
 package br.com.aluraflix.controller;
 
-import br.com.aluraflix.controller.dto.CategoriaDto;
+import br.com.aluraflix.dtos.CategoriaDto;
 import br.com.aluraflix.model.Categoria;
 import br.com.aluraflix.model.Video;
 import br.com.aluraflix.repository.CategoriaRepository;

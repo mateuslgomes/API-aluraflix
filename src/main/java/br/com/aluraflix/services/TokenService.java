@@ -1,4 +1,4 @@
-package br.com.aluraflix.config.security;
+package br.com.aluraflix.services;
 
 import java.util.Date;
 

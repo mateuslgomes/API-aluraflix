@@ -7,7 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.aluraflix.config.security.TokenService;
+import br.com.aluraflix.services.TokenService;
 import br.com.aluraflix.model.Usuario;
 import br.com.aluraflix.repository.UsuarioRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
