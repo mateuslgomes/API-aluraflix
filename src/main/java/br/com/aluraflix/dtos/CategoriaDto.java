@@ -3,6 +3,10 @@ package br.com.aluraflix.dtos;
 import br.com.aluraflix.model.Categoria;
 import br.com.aluraflix.enums.Cor;
 import br.com.aluraflix.repository.CategoriaRepository;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
@@ -11,6 +15,11 @@ import javax.validation.constraints.NotNull;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+
+@AllArgsConstructor
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class CategoriaDto {
     private Long id;
 
@@ -25,61 +34,4 @@ public class CategoriaDto {
         this.cor = cor;
     }
 
-    public CategoriaDto() {}
-
-    public CategoriaDto(Categoria categoria) {
-        this.id = categoria.getId();
-        this.titulo = categoria.getTitulo();
-        this.cor = categoria.getCor();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public Cor getCor() {
-        return cor;
-    }
-
-    public void setCor(Cor cor) {
-        this.cor = cor;
-    }
-
-    public Categoria gerarCategoria() {
-        return new Categoria(this.titulo, this.getCor());
-    }
-
-    public Categoria update(Long id, CategoriaRepository categoriaRepository) {
-        if (id == 1) {return null;}
-        try  {
-            Optional<Categoria> categoriaOptional = categoriaRepository.findById(id);
-            Categoria categoria = categoriaOptional.get();
-            categoria.setTitulo(this.titulo);
-            categoria.setCor(this.cor);
-            return categoria;
-        }
-        catch (NoSuchElementException e) {
-            return null;
-        }
-    }
-
-    public boolean delete(Long id, CategoriaRepository categoriaRepository) {
-        if (categoriaRepository.existsById(id) && id != 1) {
-            categoriaRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
 }

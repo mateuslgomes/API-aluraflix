@@ -4,8 +4,8 @@ import br.com.aluraflix.dtos.VideoDto;
 import br.com.aluraflix.model.Video;
 import br.com.aluraflix.repository.CategoriaRepository;
 import br.com.aluraflix.repository.VideoRepository;
+import br.com.aluraflix.services.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +47,7 @@ public class VideosController {
 
     @PostMapping
     public ResponseEntity<Video> saveVideo (@RequestBody @Valid VideoDto dto, UriComponentsBuilder uriBuilder) {
-        Video video = dto.gerarVideo(categoriaRepository);
+        Video video = VideoService.gerarVideo(categoriaRepository, dto);
         if (video != null) {
             videoRepository.save(video);
             URI uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
@@ -58,22 +58,11 @@ public class VideosController {
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<Video> updateVideo(@PathVariable Long id, @RequestBody @Valid VideoDto dto) {
-        Video video = dto.update(id, videoRepository, categoriaRepository);
-        if (video != null) {
-            videoRepository.save(video);
-            return ResponseEntity.ok(video);
-        }
-        return ResponseEntity.badRequest().build();
+        return VideoService.update(id, dto, videoRepository, categoriaRepository);
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> deleteVideo(@PathVariable Long id, VideoDto dto) {
-        try {
-            videoRepository.deleteById(id);
-            return ResponseEntity.ok().build();
-        }
-        catch (EmptyResultDataAccessException e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<String> deleteVideo(@PathVariable Long id, VideoDto dto) {
+        return ResponseEntity.badRequest().build();
     }
 }

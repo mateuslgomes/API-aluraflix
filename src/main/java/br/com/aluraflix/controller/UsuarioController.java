@@ -20,7 +20,7 @@ public class UsuarioController {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    @PostMapping("/cadastrar")
+    @PostMapping("cadastrar")
     public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid FormCreate form) {
         Usuario usuario = form.gerarUsuario(form, usuarioRepository);
         if (usuario != null) {

@@ -5,6 +5,7 @@ import br.com.aluraflix.model.Categoria;
 import br.com.aluraflix.model.Video;
 import br.com.aluraflix.repository.CategoriaRepository;
 import br.com.aluraflix.repository.VideoRepository;
+import br.com.aluraflix.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,28 +49,19 @@ public class CategoriaController {
 
     @PostMapping
     public ResponseEntity<Categoria> saveCategoria (@RequestBody @Valid CategoriaDto dto, UriComponentsBuilder uriBuilder) {
-        Categoria categoria = dto.gerarCategoria();
+        Categoria categoria = CategoriaService.gerarCategoria(dto);
         categoriaRepository.save(categoria);
         URI uri = uriBuilder.path("/categorias/{id}").buildAndExpand(categoria.getId()).toUri();
         return ResponseEntity.created(uri).body(categoria);
     }
 
-
     @PutMapping(path = "/{id}")
     public ResponseEntity<Categoria> updateCategoria(@PathVariable Long id, @RequestBody @Valid CategoriaDto dto) {
-        Categoria categoria = dto.update(id, categoriaRepository);
-        if (categoria != null) {
-            categoriaRepository.save(categoria);
-            return ResponseEntity.ok(categoria);
-        }
-        return ResponseEntity.badRequest().build();
+        return CategoriaService.update(id, categoriaRepository, dto);
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> deleteVideo(@PathVariable Long id, CategoriaDto dto) {
-        if (dto.delete(id, categoriaRepository)) {
-            return ResponseEntity.accepted().build();
-        }
-        return new ResponseEntity<>("O ID 1 não pode ser deletado.", HttpStatus.FORBIDDEN);
+    public ResponseEntity<String> deleteVideo(@PathVariable Long id, CategoriaDto dto) {
+        return CategoriaService.delete(id, categoriaRepository, dto);
     }
 }

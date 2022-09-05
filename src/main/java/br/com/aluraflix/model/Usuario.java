@@ -14,6 +14,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 @Setter
 @Entity
+@RequiredArgsConstructor
 public class Usuario implements UserDetails {
 
     private static final long serialVersionUID = 1L;
@@ -43,8 +45,6 @@ public class Usuario implements UserDetails {
         this.email = email;
         this.senha = senha;
     }
-
-    public Usuario(){}
 
     @Override
     public int hashCode() {
