@@ -33,6 +33,12 @@ Desenvolver uma API REST backend do zero, aplicando regras de negócio fornecida
 ```
 #
 
+- GET /videos/?search={pesquisaByTitulo}
+
+> Pesquisa os vídeos pelo titulo através de um parâmetro passado pelo url.
+
+#
+
 - PUT /videos/{id}
 > Atualiza informações do vídeos cadastrado como ID escolhido.
 ##### Exemplo: 
