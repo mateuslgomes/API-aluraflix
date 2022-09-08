@@ -4,31 +4,31 @@ import br.com.aluraflix.dtos.VideoDto;
 import br.com.aluraflix.model.Video;
 import br.com.aluraflix.repository.CategoriaRepository;
 import br.com.aluraflix.repository.VideoRepository;
+import br.com.aluraflix.services.CategoriaService;
 import br.com.aluraflix.services.VideoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/videos")
 public class VideosController {
-    @Autowired
-    VideoRepository videoRepository;
 
-    @Autowired
-    CategoriaRepository categoriaRepository;
+    private static VideoService videoService;
+    private static CategoriaService categoriaService;
+    private static VideoRepository videoRepository;
+    private static CategoriaRepository categoriaRepository;
 
     @RequestMapping
-    public List<Video> videos(@RequestParam(required = false, value = "search") String titulo){
-        if (titulo == null) {
-            Sort sort = Sort.by("id").descending();
+    public List<Video> videos(@RequestParam(value = "search", defaultValue = "") String titulo){
+        if (Objects.equals(titulo, "")) {
             return videoRepository.findAll();
         }
         return videoRepository.findByTitulo(titulo);
@@ -47,18 +47,13 @@ public class VideosController {
 
     @PostMapping
     public ResponseEntity<Video> saveVideo (@RequestBody @Valid VideoDto dto, UriComponentsBuilder uriBuilder) {
-        Video video = VideoService.gerarVideo(categoriaRepository, dto);
-        if (video != null) {
-            videoRepository.save(video);
-            URI uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
-            return ResponseEntity.created(uri).body(video);
-        }
-            return ResponseEntity.badRequest().build();
+        Video video = videoService.gerarVideo(dto);
+        return videoService.save(video, uriBuilder);
     }
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<Video> updateVideo(@PathVariable Long id, @RequestBody @Valid VideoDto dto) {
-        return VideoService.update(id, dto, videoRepository, categoriaRepository);
+        return videoService.update(id, dto);
     }
 
     @DeleteMapping(path = "/{id}")

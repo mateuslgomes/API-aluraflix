@@ -9,7 +9,5 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
-
-}
+public interface CategoriaRepository extends JpaRepository<Categoria, Long> {}
 
