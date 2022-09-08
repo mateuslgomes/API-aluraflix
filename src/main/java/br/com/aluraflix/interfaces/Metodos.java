@@ -1,14 +1,14 @@
 package br.com.aluraflix.interfaces;
 
-import br.com.aluraflix.dtos.VideoDto;
-import br.com.aluraflix.model.Video;
-import br.com.aluraflix.repository.CategoriaRepository;
-import br.com.aluraflix.repository.VideoRepository;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.UriComponentsBuilder;
 
 public interface Metodos {
 
-    public Object update(Long id, VideoDto dto);
+    public Object save(Object obj, UriComponentsBuilder builder);
+
+    public Object gerar(Object obj);
+
+    public Object update(Long id, Object obj);
 
     public Object deleteById(Long id);
 

@@ -7,6 +7,7 @@ import br.com.aluraflix.model.Video;
 import br.com.aluraflix.repository.CategoriaRepository;
 import br.com.aluraflix.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -28,12 +29,13 @@ public class VideoService implements Metodos {
         return dto.substring(0, 31).equals("https://www.youtube.com/watch?v");
     }
 
-    public Video gerarVideo(VideoDto dto) {
+    @Override
+    public Video gerar(Object obj) {
+        VideoDto dto = (VideoDto) obj;
         if (urlIsValid(dto.getUrl()) && dto.getCategoriaId() == null) {
             Optional<Categoria> categoria = categoriaRepository.findById(CATEGORIA_LIVRE);
             return new Video(dto.getTitulo(), dto.getDescricao(), dto.getUrl(),
                     categoria.get());
-
         } else if (urlIsValid(dto.getUrl()) && dto.getCategoriaId() != null) {
             Optional<Categoria> categoria = categoriaRepository.findById(dto.getCategoriaId());
             return new Video(dto.getTitulo(), dto.getDescricao(), dto.getUrl(),
@@ -60,7 +62,8 @@ public class VideoService implements Metodos {
     }
 
     @Override
-    public ResponseEntity<Video> update(Long id, VideoDto dto) {
+    public ResponseEntity<Video> update(Long id, Object obj) {
+        VideoDto dto = (VideoDto) obj;
         Optional<Video> videoOptional = repository.findById(id);
         Optional<Categoria> categoriaOptional = categoriaRepository.findById(dto.getCategoriaId());
         if (categoriaOptional.isPresent() && videoOptional.isPresent() && urlIsValid(dto.getUrl())) {
@@ -69,7 +72,9 @@ public class VideoService implements Metodos {
         return ResponseEntity.badRequest().build();
     }
 
-    public ResponseEntity<Video> save(Video video, UriComponentsBuilder builder) {
+    @Override
+    public ResponseEntity<Video> save(Object obj, UriComponentsBuilder builder) {
+        Video video = (Video) obj;
         if (video != null) {
             URI uri = builder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
         return ResponseEntity.created(uri).body(video);

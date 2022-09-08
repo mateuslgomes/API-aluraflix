@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import br.com.aluraflix.services.TokenService;
 import br.com.aluraflix.dtos.TokenDto;
 import br.com.aluraflix.form.FormLogin;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,15 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/auth")
 public class AutenticacaoController {
 
-    @Autowired
-    private AuthenticationManager authManager;
+    private final AuthenticationManager authManager;
 
-    @Autowired
-    private TokenService tokenService;
+    private final TokenService tokenService;
 
     @PostMapping
     public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid FormLogin form) {

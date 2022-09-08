@@ -26,6 +26,7 @@ public class VideosController {
     private static VideoRepository videoRepository;
     private static CategoriaRepository categoriaRepository;
 
+
     @RequestMapping
     public List<Video> videos(@RequestParam(value = "search", defaultValue = "") String titulo){
         if (Objects.equals(titulo, "")) {
@@ -47,7 +48,7 @@ public class VideosController {
 
     @PostMapping
     public ResponseEntity<Video> saveVideo (@RequestBody @Valid VideoDto dto, UriComponentsBuilder uriBuilder) {
-        Video video = videoService.gerarVideo(dto);
+        Video video = videoService.gerar(dto);
         return videoService.save(video, uriBuilder);
     }
 
@@ -58,6 +59,6 @@ public class VideosController {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteVideo(@PathVariable Long id, VideoDto dto) {
-        return ResponseEntity.badRequest().build();
+        return videoService.deleteById(id);
     }
 }

@@ -6,8 +6,7 @@ import br.com.aluraflix.model.Video;
 import br.com.aluraflix.repository.CategoriaRepository;
 import br.com.aluraflix.repository.VideoRepository;
 import br.com.aluraflix.services.CategoriaService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -17,15 +16,14 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-    @Autowired
-    CategoriaRepository categoriaRepository;
-
-    @Autowired
-    VideoRepository videoRepository;
+    private final CategoriaService service;
+    private final CategoriaRepository categoriaRepository;
+    private final VideoRepository videoRepository;
 
     @RequestMapping
     public List<Categoria> categorias() {
@@ -40,28 +38,26 @@ public class CategoriaController {
 
     @RequestMapping(path = "/{id}/videos")
     public ResponseEntity<List<Video>> videoByCategoria(@PathVariable Long id) {
-        List<Video> video = videoRepository.findByCategoria(id);
-        if (!video.isEmpty()) {
-            return ResponseEntity.ok(video);
+        List<Video> videos = videoRepository.findByCategoria(id);
+        if (!videos.isEmpty()) {
+            return ResponseEntity.ok(videos);
         }
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping
     public ResponseEntity<Categoria> saveCategoria (@RequestBody @Valid CategoriaDto dto, UriComponentsBuilder uriBuilder) {
-        Categoria categoria = CategoriaService.gerarCategoria(dto);
-        categoriaRepository.save(categoria);
-        URI uri = uriBuilder.path("/categorias/{id}").buildAndExpand(categoria.getId()).toUri();
-        return ResponseEntity.created(uri).body(categoria);
+        Categoria categoria = service.gerar(dto);
+        return service.save(categoria, uriBuilder);
     }
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<Categoria> updateCategoria(@PathVariable Long id, @RequestBody @Valid CategoriaDto dto) {
-        return CategoriaService.update(id, categoriaRepository, dto);
+        return service.update(id, dto);
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteVideo(@PathVariable Long id, CategoriaDto dto) {
-        return CategoriaService.delete(id, categoriaRepository, dto);
+        return service.deleteById(id);
     }
 }
