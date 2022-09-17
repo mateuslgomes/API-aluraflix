@@ -7,11 +7,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 @Getter
 @Setter
 public class FormLogin {
-
     private String email;
     private String senha;
-
-
     public UsernamePasswordAuthenticationToken converter() {
         return new UsernamePasswordAuthenticationToken(email, senha);
     }

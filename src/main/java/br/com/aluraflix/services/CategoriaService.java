@@ -1,60 +1,60 @@
 package br.com.aluraflix.services;
 
 import br.com.aluraflix.dtos.CategoriaDto;
-import br.com.aluraflix.interfaces.Metodos;
 import br.com.aluraflix.model.Categoria;
+import br.com.aluraflix.model.Video;
 import br.com.aluraflix.repository.CategoriaRepository;
-import lombok.RequiredArgsConstructor;
+import br.com.aluraflix.repository.VideoRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.List;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Service
-public class CategoriaService implements Metodos {
+public class CategoriaService{
 
-    public final CategoriaRepository repository;
+    public CategoriaRepository repository;
+    public VideoRepository videoRepository;
 
-    @Override
-    public ResponseEntity<Categoria> save(Object obj, UriComponentsBuilder builder) {
-        Categoria categoria = (Categoria) obj;
-        URI uri = builder.path("/categorias/{id}").buildAndExpand(categoria.getId()).toUri();
-        return ResponseEntity.created(uri).body(categoria);
+    public Categoria save(CategoriaDto dto) {
+        return repository.save(new Categoria(dto.getTitulo(), dto.getCor()));
     }
 
-    @Override
-    public Categoria gerar(Object obj) {
-        CategoriaDto dto = (CategoriaDto) obj;
-        return new Categoria(dto.getTitulo(), dto.getCor());
-    }
-
-    @Override
-    public ResponseEntity<Categoria> update(Long id, Object obj) {
-        CategoriaDto dto = (CategoriaDto) obj;
-        if (id == 1) {return null;}
-        try  {
-            Optional<Categoria> categoriaOptional = repository.findById(id);
-            Categoria categoria = categoriaOptional.get();
+    public ResponseEntity<Categoria> update(Long id, CategoriaDto dto) {
+        if (repository.existsById(id) && id!=1) {
+            Categoria categoria = repository.findById(id).get();
             categoria.setTitulo(dto.getTitulo());
             categoria.setCor(dto.getCor());
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(repository.save(categoria));
         }
-        catch (NoSuchElementException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok().build();
     }
 
-    @Override
     public ResponseEntity<String> deleteById(Long id) {
-        if (repository.existsById(id) && id != 1) {
-            repository.deleteById(id);
-            return ResponseEntity.ok().build();
+        if (repository.existsById(id)) {
+            if (id != 1) {
+                repository.deleteById(id);
+                return ResponseEntity.ok().build();
+            }
         }
         return new ResponseEntity<String>("O ID 1 não pode ser deletado.", HttpStatus.FORBIDDEN);
+    }
+
+    public ResponseEntity<List<Categoria>> findAll() {
+        return ResponseEntity.ok(repository.findAll());
+    }
+
+    public ResponseEntity<Categoria> findById(Long id) {
+        if (repository.existsById(id)) {
+            return ResponseEntity.ok(repository.findById(id).get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    public ResponseEntity<List<Video>> findByCategoria(Long id) {
+       return ResponseEntity.ok(videoRepository.findByCategoria(id));
     }
 }

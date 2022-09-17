@@ -3,61 +3,50 @@ package br.com.aluraflix.controller;
 import br.com.aluraflix.dtos.CategoriaDto;
 import br.com.aluraflix.model.Categoria;
 import br.com.aluraflix.model.Video;
-import br.com.aluraflix.repository.CategoriaRepository;
-import br.com.aluraflix.repository.VideoRepository;
 import br.com.aluraflix.services.CategoriaService;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-    private final CategoriaService service;
-    private final CategoriaRepository categoriaRepository;
-    private final VideoRepository videoRepository;
+    private CategoriaService service;
 
     @RequestMapping
-    public List<Categoria> categorias() {
-        return categoriaRepository.findAll();
+    public ResponseEntity<List<Categoria>> categorias() {
+        return service.findAll();
     }
 
     @RequestMapping(path = "/{id}")
     public ResponseEntity<Categoria> categoria(@PathVariable Long id) {
-        Optional<Categoria> categoria = categoriaRepository.findById(id);
-        return categoria.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return service.findById(id);
     }
 
     @RequestMapping(path = "/{id}/videos")
-    public ResponseEntity<List<Video>> videoByCategoria(@PathVariable Long id) {
-        List<Video> videos = videoRepository.findByCategoria(id);
-        if (!videos.isEmpty()) {
-            return ResponseEntity.ok(videos);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<List<Video>> findByCategoria(@PathVariable Long id) {
+        return service.findByCategoria(id);
     }
 
     @PostMapping
-    public ResponseEntity<Categoria> saveCategoria (@RequestBody @Valid CategoriaDto dto, UriComponentsBuilder uriBuilder) {
-        Categoria categoria = service.gerar(dto);
-        return service.save(categoria, uriBuilder);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Categoria save(@RequestBody @Valid CategoriaDto dto) {
+        return service.save(dto);
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<Categoria> updateCategoria(@PathVariable Long id, @RequestBody @Valid CategoriaDto dto) {
+    public ResponseEntity<Categoria> update(@PathVariable Long id, @RequestBody @Valid CategoriaDto dto) {
         return service.update(id, dto);
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> deleteVideo(@PathVariable Long id, CategoriaDto dto) {
+    public ResponseEntity<String> delete(@PathVariable Long id, CategoriaDto dto) {
         return service.deleteById(id);
     }
 }

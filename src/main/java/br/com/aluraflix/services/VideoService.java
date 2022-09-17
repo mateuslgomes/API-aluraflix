@@ -1,84 +1,74 @@
 package br.com.aluraflix.services;
 
 import br.com.aluraflix.dtos.VideoDto;
-import br.com.aluraflix.interfaces.Metodos;
-import br.com.aluraflix.model.Categoria;
 import br.com.aluraflix.model.Video;
 import br.com.aluraflix.repository.CategoriaRepository;
 import br.com.aluraflix.repository.VideoRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Optional;
+import java.util.List;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Service
-public class VideoService implements Metodos {
+public class VideoService {
 
-    private final VideoRepository repository;
+    private VideoRepository repository;
 
-    private final CategoriaRepository categoriaRepository;
+    private CategoriaRepository categoriaRepository;
 
     private final static Long CATEGORIA_LIVRE = 1L;
 
-    private static boolean urlIsValid(String dto) {
-        return dto.substring(0, 31).equals("https://www.youtube.com/watch?v");
+    private static boolean urlIsValid(String url) {
+        return url.substring(0, 31).equals("https://www.youtube.com/watch?v");
     }
 
-    @Override
-    public Video gerar(Object obj) {
-        VideoDto dto = (VideoDto) obj;
-        if (urlIsValid(dto.getUrl()) && dto.getCategoriaId() == null) {
-            Optional<Categoria> categoria = categoriaRepository.findById(CATEGORIA_LIVRE);
-            return new Video(dto.getTitulo(), dto.getDescricao(), dto.getUrl(),
-                    categoria.get());
-        } else if (urlIsValid(dto.getUrl()) && dto.getCategoriaId() != null) {
-            Optional<Categoria> categoria = categoriaRepository.findById(dto.getCategoriaId());
-            return new Video(dto.getTitulo(), dto.getDescricao(), dto.getUrl(),
-                    categoria.get());
-        }
-        return null;
-    }
-
-    @Override
     public ResponseEntity<String> deleteById(Long id) {
-        Optional<Video> video = repository.findById(id);
-        if (video.isPresent()) {
+        if (repository.existsById(id)) {
             repository.deleteById(id);
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.notFound().build();
     }
 
-    private static Video updateVideo(Video video, Categoria categoria, VideoDto dto) {
-        video.setDescricao(dto.getDescricao());
-        video.setTitulo(dto.getTitulo());
-        video.setUrl(dto.getUrl());
-        return video;
-    }
-
-    @Override
-    public ResponseEntity<Video> update(Long id, Object obj) {
-        VideoDto dto = (VideoDto) obj;
-        Optional<Video> videoOptional = repository.findById(id);
-        Optional<Categoria> categoriaOptional = categoriaRepository.findById(dto.getCategoriaId());
-        if (categoriaOptional.isPresent() && videoOptional.isPresent() && urlIsValid(dto.getUrl())) {
-            return ResponseEntity.ok(updateVideo(videoOptional.get(), categoriaOptional.get(), dto));
+    public ResponseEntity<Video> update(Long id, VideoDto dto) {
+        if (repository.existsById(id)) {
+            repository.save(new Video(id, dto.getTitulo(), dto.getDescricao(),
+                    dto.getUrl(), categoriaRepository.findById(dto.getCategoriaId()).get()));
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.notFound().build();
     }
-
-    @Override
-    public ResponseEntity<Video> save(Object obj, UriComponentsBuilder builder) {
-        Video video = (Video) obj;
-        if (video != null) {
+    public ResponseEntity<Video> save(VideoDto dto, UriComponentsBuilder builder) {
+        if (urlIsValid(dto.getUrl()) && dto.getCategoriaId() != null && categoriaRepository.existsById(dto.getCategoriaId())) {
+            Video video = new Video(dto.getTitulo(), dto.getDescricao(), dto.getUrl(), categoriaRepository.findById(dto.getCategoriaId()).get());
             URI uri = builder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
-        return ResponseEntity.created(uri).body(video);
+            repository.save(video);
+            return ResponseEntity.created(uri).body(video);
+
+        } else if (dto.getCategoriaId() == null && urlIsValid(dto.getUrl())) {
+            Video video = new Video(dto.getTitulo(), dto.getDescricao(), dto.getUrl(), categoriaRepository.findById(dto.getCategoriaId()).get());
+            URI uri = builder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
+            repository.save(video);
+            return ResponseEntity.created(uri).body(video);
         }
-        return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
+        }
+
+    public List<Video> findAll() {
+        return repository.findAll();
+    }
+
+    public List<Video> findByTitulo(String titulo) {
+        return repository.findByTitulo(titulo);
+    }
+
+    public ResponseEntity<Video> findById(Long id) {
+        if (repository.existsById(id)) {
+            return ResponseEntity.ok(repository.findById(id).get());
+        }
+        return ResponseEntity.notFound().build();
     }
 }

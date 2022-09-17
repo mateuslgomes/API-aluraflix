@@ -1,14 +1,17 @@
 package br.com.aluraflix.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
 @RequiredArgsConstructor
 @Table(name = "videos")
 public class Video {
@@ -35,5 +38,4 @@ public class Video {
         this.descricao = descricao;
         this.url = url;
     }
-
 }

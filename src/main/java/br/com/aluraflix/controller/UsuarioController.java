@@ -3,6 +3,7 @@ package br.com.aluraflix.controller;
 import br.com.aluraflix.form.FormCreate;
 import br.com.aluraflix.model.Usuario;
 import br.com.aluraflix.repository.UsuarioRepository;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
 
-    private final UsuarioRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository;
 
     @PostMapping("cadastrar")
     public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid FormCreate form) {
